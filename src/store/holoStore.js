@@ -1,47 +1,74 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export const useHoloStore = create((set) => ({
-  // États
-  aiActive: false,
-  rotation: true,
-  color: '#00ffff',
-  message: 'Système holographique initialisé',
-  isThinking: false,
-  chatHistory: [],
+export const useHoloStore = create(
+  persist(
+    (set) => ({
+      // États
+      aiActive: false,
+      rotation: true,
+      color: '#00ffff',
+      message: 'Système holographique initialisé',
+      isThinking: false,
+      chatHistory: [],
 
-  // Actions pour l'IA
-  setAiActive: (active) => set({
-    aiActive: active,
-    color: active ? '#00ff88' : '#00ffff',
-    message: active ? 'IA activée - Prêt à interagir' : 'IA en veille'
-  }),
+      // Actions pour l'IA
+      setAiActive: (active) => set({
+        aiActive: active,
+        color: active ? '#00ff88' : '#00ffff',
+        message: active ? 'IA activée - Prêt à interagir' : 'IA en veille'
+      }),
 
-  setIsThinking: (isThinking) => set({ isThinking }),
+      setIsThinking: (isThinking) => set({ isThinking }),
 
-  isSpeaking: false,
-  setIsSpeaking: (isSpeaking) => set({ isSpeaking }),
+      // État Personnalisation
+      voiceName: null,
+      avatarType: 'face',
+      voiceEnabled: true,
+      geminiModel: 'gemini-2.5-flash',
 
-  // Actions pour l'hologramme
-  setRotation: (rotation) => set({ rotation }),
+      // Actions
+      setVoiceName: (voiceName) => set({ voiceName }),
+      setAvatarType: (avatarType) => set({ avatarType }),
+      setVoiceEnabled: (enabled) => set({ voiceEnabled: enabled }),
+      setGeminiModel: (model) => set({ geminiModel: model }),
 
-  setColor: (color) => set({ color }),
+      isSpeaking: false,
+      setIsSpeaking: (speaking) => set({ isSpeaking: speaking }),
 
-  setMessage: (message) => set({ message }),
+      // Actions pour l'hologramme
+      setRotation: (rotation) => set({ rotation }),
 
-  // Actions pour le chat
-  addMessage: (role, content) => set((state) => ({
-    chatHistory: [...state.chatHistory, { role, content, timestamp: Date.now() }]
-  })),
+      setColor: (color) => set({ color }),
 
-  clearChat: () => set({ chatHistory: [] }),
+      setMessage: (message) => set({ message }),
 
-  // Reset complet
-  reset: () => set({
-    aiActive: false,
-    rotation: true,
-    color: '#00ffff',
-    message: 'Système réinitialisé',
-    isThinking: false,
-    chatHistory: []
-  })
-}));
+      // Actions pour le chat
+      addMessage: (role, content) => set((state) => ({
+        chatHistory: [...state.chatHistory, { role, content, timestamp: Date.now() }]
+      })),
+
+      clearChat: () => set({ chatHistory: [] }),
+
+      // Reset complet
+      reset: () => set({
+        aiActive: false,
+        rotation: true,
+        color: '#00ffff',
+        message: 'Système réinitialisé',
+        isThinking: false,
+        chatHistory: []
+      })
+    }),
+    {
+      name: 'holo-storage',
+      partialize: (state) => ({
+        voiceName: state.voiceName,
+        avatarType: state.avatarType,
+        voiceEnabled: state.voiceEnabled,
+        geminiModel: state.geminiModel,
+        color: state.color
+      }),
+    }
+  )
+);

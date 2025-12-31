@@ -47,11 +47,26 @@ export const SCENE_CONFIG = {
 };
 
 // Configuration de l'IA
-export const AI_CONFIG = {
-  DEFAULT_MODEL: 'claude-sonnet-4-20250514',
-  MAX_TOKENS: 1000,
-  TEMPERATURE: 0.7,
-  API_VERSION: '2023-06-01'
+// Configuration de l'IA (Gemini)
+// Configuration de l'IA (Gemini)
+// Configuration de l'IA (Gemini)
+// Configuration de l'IA (Gemini)
+// Configuration de l'IA (Gemini)
+export const GEMINI_CONFIG = {
+  MODELS: [
+    // --- Modèles Gratuits Vérifiés (✅ OK) ---
+    { id: 'gemini-3-flash-preview', name: 'Gemini 3.0 Flash (🚀 New Speed King)' },
+    { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash (⚡ High Perf)' },
+    { id: 'gemini-flash-latest', name: 'Gemini 1.5 Flash (🛡️ Stable)' },
+    { id: 'gemma-3-27b-it', name: 'Gemma 3 27B (🦎 Open Expert)' },
+
+    // --- Modèles Payants / Quota (⛔ Limit: 0) ---
+    { id: 'gemini-3-pro-preview', name: 'Gemini 3.0 Pro [Paid Only]' },
+    { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro [Paid Only]' },
+  ],
+  DEFAULT_MODEL: 'gemini-2.5-flash',
+  MAX_TOKENS: 2000,
+  TEMPERATURE: 0.7
 };
 
 // Messages système

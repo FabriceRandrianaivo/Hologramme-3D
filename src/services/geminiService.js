@@ -1,7 +1,7 @@
 // Service pour l'API Google Gemini (REST)
 export const geminiService = {
-    async sendMessage(apiKey, userMessage, history = []) {
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    async sendMessage(apiKey, modelId, userMessage, history = []) {
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
         // Formatage de l'historique pour Gemini
         // Gemini attend: { role: "user" | "model", parts: [{ text: "..." }] }

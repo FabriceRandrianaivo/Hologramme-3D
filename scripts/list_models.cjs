@@ -1,6 +1,6 @@
-import https from 'https';
+const https = require('https');
 
-const apiKey = process.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.VITE_GEMINI_API_KEY || process.argv[2];
 
 if (!apiKey) {
     console.error("VITE_GEMINI_API_KEY is not set.");
@@ -26,9 +26,8 @@ https.get(url, (res) => {
         const models = JSON.parse(data);
         console.log("Available Models:");
         models.models.forEach(model => {
-            if (model.supportedGenerationMethods && model.supportedGenerationMethods.includes("generateContent")) {
-                console.log(`- ${model.name}`);
-            }
+            // Afficher tous les modèles disponibles pour le debug
+            console.log(`- ${model.name}`);
         });
     });
 

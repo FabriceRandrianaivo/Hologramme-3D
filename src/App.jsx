@@ -6,6 +6,7 @@ import Header from './components/UI/Header';
 import StatusIndicator from './components/UI/StatusIndicator';
 import ControlPanel from './components/UI/ControlPanel';
 import ChatInterface from './components/UI/ChatInterface';
+import SettingsPanel from './components/UI/SettingsPanel';
 
 export default function HologramApp() {
   return (
@@ -21,6 +22,7 @@ export default function HologramApp() {
       <Header />
       <StatusIndicator />
       <ChatInterface />
+      <SettingsPanel />
       <ControlPanel />
     </MainLayout>
   );

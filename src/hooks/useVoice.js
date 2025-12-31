@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useHoloStore } from '../store/holoStore';
 
 export const useVoice = () => {
@@ -62,28 +62,72 @@ export const useVoice = () => {
 
     // Text-to-Speech
     const speak = (text) => {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'fr-FR';
-            utterance.rate = 1.0;
-            utterance.pitch = 1;
+        const { voiceEnabled, voiceName, setIsSpeaking } = useHoloStore.getState();
+        console.log('[useVoice] Speak requested:', { text, voiceEnabled, voiceName });
 
-            utterance.onstart = () => useHoloStore.getState().setIsSpeaking(true);
-            utterance.onend = () => useHoloStore.getState().setIsSpeaking(false);
-            utterance.onerror = () => useHoloStore.getState().setIsSpeaking(false);
+        if (!voiceEnabled) {
+            console.warn('[useVoice] Voice disabled in settings.');
+            return;
+        }
+        if (!('speechSynthesis' in window)) return;
 
-            window.speechSynthesis.speak(utterance);
-            setMessage('🔊 Hologramme parle...');
+        // Stop précédent
+        window.speechSynthesis.cancel();
+
+        // Nettoyage du texte pour la parole (Retire les ** du Markdown, etc.)
+        const cleanText = text
+            .replace(/\*\*/g, '')      // Retire le gras **
+            .replace(/\*/g, '')        // Retire l'italique *
+            .replace(/#{1,6}\s/g, '')  // Retire les headers #
+            .replace(/`/g, '')         // Retire les backticks `
+            .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1'); // Garde le texte des liens [texte](url)
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'fr-FR';
+        utterance.rate = 1.0;
+        utterance.pitch = 1;
+
+        // Appliquer la voix choisie ou défaut "Google"
+        const voices = window.speechSynthesis.getVoices();
+
+        if (voiceName) {
+            const selectedVoice = voices.find(v => v.name === voiceName);
+            if (selectedVoice) utterance.voice = selectedVoice;
         } else {
-            console.warn('Text-to-Speech non supporté');
+            // Tentative de trouver une voix Google Française par défaut
+            const googleVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('fr'));
+            if (googleVoice) utterance.voice = googleVoice;
+        }
+
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = () => setIsSpeaking(false);
+
+        window.speechSynthesis.speak(utterance);
+        setMessage('🔊 Hologramme parle...');
+    };
+
+    const stopSpeech = () => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            useHoloStore.getState().setIsSpeaking(false);
         }
     };
+
+    const getVoices = useCallback(() => {
+        if ('speechSynthesis' in window) {
+            return window.speechSynthesis.getVoices();
+        }
+        return [];
+    }, []);
 
     return {
         isListening,
         startListening,
         stopListening,
         speak,
+        stopSpeech,
+        getVoices,
         isSupported: !!recognition
     };
 };

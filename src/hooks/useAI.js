@@ -37,8 +37,10 @@ export const useAI = () => {
       }
 
       // 3. Appel Gemini
-      const response = await geminiService.sendMessage(apiKey, userMessage, messages);
+      const { geminiModel } = useHoloStore.getState();
+      const response = await geminiService.sendMessage(apiKey, geminiModel || 'gemini-2.5-flash', userMessage, messages);
       finalizeMessage(response);
+      return response;
 
     } catch (err) {
       console.error(err);
