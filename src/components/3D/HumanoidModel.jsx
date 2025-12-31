@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { useGLTF } from '@react-three/drei';
 import { useHoloStore } from "../../store/holoStore";
 import { ANIMATION } from "../../utils/constants";
 import HolographicMaterial from "./HolographicMaterial";
 
 const HumanoidModel = () => {
-  const groupRef = React.useRef();
-  const timeRef = React.useRef(0);
-  const [hovered, setHovered] = React.useState(false);
+  const groupRef = useRef();
+  const timeRef = useRef(0);
+  const [hovered, setHovered] = useState(false);
   const { color } = useHoloStore();
 
-  React.useEffect(() => {
+  // Charger le modèle 3D
+  const { nodes } = useGLTF('/models/face2.glb');
+
+  useEffect(() => {
+    // Debug: Voir les noms des nodes disponibles
+    console.log("🤖 Nodes disponibles:", nodes ? Object.keys(nodes) : 'aucun');
+  }, [nodes]);
+
+  useEffect(() => {
     let animationId;
     const animate = () => {
       timeRef.current += 0.016;
       if (groupRef.current) {
-        groupRef.current.rotation.y = Math.sin(timeRef.current * 0.3) * 0.2;
+        // Rotation douce pour donner vie
+        groupRef.current.rotation.y = Math.sin(timeRef.current * 0.2) * 0.1;
+        // Léger flottement
         groupRef.current.position.y = Math.sin(timeRef.current * 0.5) * 0.1;
       }
       animationId = requestAnimationFrame(animate);
@@ -23,44 +34,36 @@ const HumanoidModel = () => {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
+  // Trouver le premier mesh disponible automatiquement
+  const meshNode = React.useMemo(() => {
+    if (!nodes) return null;
+    return Object.values(nodes).find(n => n.isMesh);
+  }, [nodes]);
+
+  // Loader si pas de mesh trouvé
+  if (!meshNode) {
+    return null;
+  }
+
   return (
     <group
       ref={groupRef}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      scale={hovered ? ANIMATION.HOVER_SCALE : 1}
+      scale={hovered ? 15.5 : 15}
     >
-      <mesh position={[0, 0, 0]}>
-        <capsuleGeometry args={[0.3, 1, 16, 32]} />
-        <HolographicMaterial color={color} timeRef={timeRef} />
-      </mesh>
-
-      <mesh position={[0, 1, 0]}>
-        <sphereGeometry args={[0.35, 32, 32]} />
-        <HolographicMaterial color={color} timeRef={timeRef} />
-      </mesh>
-
-      <mesh position={[-0.5, 0.3, 0]} rotation={[0, 0, 0.3]}>
-        <capsuleGeometry args={[0.12, 0.8, 8, 16]} />
-        <HolographicMaterial color={color} timeRef={timeRef} />
-      </mesh>
-
-      <mesh position={[0.5, 0.3, 0]} rotation={[0, 0, -0.3]}>
-        <capsuleGeometry args={[0.12, 0.8, 8, 16]} />
-        <HolographicMaterial color={color} timeRef={timeRef} />
-      </mesh>
-
-      <mesh position={[-0.2, -1, 0]}>
-        <capsuleGeometry args={[0.15, 0.9, 8, 16]} />
-        <HolographicMaterial color={color} timeRef={timeRef} />
-      </mesh>
-
-      <mesh position={[0.2, -1, 0]}>
-        <capsuleGeometry args={[0.15, 0.9, 8, 16]} />
+      <mesh
+        geometry={meshNode.geometry}
+        rotation={[0, 0, 0]}
+        position={[0, 0, 0]}
+      >
         <HolographicMaterial color={color} timeRef={timeRef} />
       </mesh>
     </group>
   );
 };
+
+// Précharger le modèle
+useGLTF.preload('/models/face2.glb');
 
 export default HumanoidModel;
