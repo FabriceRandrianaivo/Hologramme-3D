@@ -1,4 +1,8 @@
-// HumanoidModel Component
+import React from 'react';
+import { useHoloStore } from "../../store/holoStore";
+import { ANIMATION } from "../../utils/constants";
+import HolographicMaterial from "./HolographicMaterial";
+
 const HumanoidModel = () => {
   const groupRef = React.useRef();
   const timeRef = React.useRef(0);
@@ -24,7 +28,7 @@ const HumanoidModel = () => {
       ref={groupRef}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
-      scale={hovered ? CONSTANTS.ANIMATION.HOVER_SCALE : 1}
+      scale={hovered ? ANIMATION.HOVER_SCALE : 1}
     >
       <mesh position={[0, 0, 0]}>
         <capsuleGeometry args={[0.3, 1, 16, 32]} />
