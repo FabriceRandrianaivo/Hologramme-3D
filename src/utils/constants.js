@@ -1,7 +1,7 @@
 // Couleurs holographiques
 export const COLORS = {
-  CYAN: '#00ffff',
-  GREEN: '#00ff88',
+  CYAN: '#00d2ff',
+  ACTIVE_BLUE: '#0078ff',
   BLUE: '#0088ff',
   PURPLE: '#8800ff',
   PINK: '#ff00ff',

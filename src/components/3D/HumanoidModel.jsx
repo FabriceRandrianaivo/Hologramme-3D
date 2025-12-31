@@ -35,14 +35,12 @@ const HumanoidModel = () => {
     const mat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(color),
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.75,
       emissive: new THREE.Color(color),
-      emissiveIntensity: 0.6,
+      emissiveIntensity: 0.45,
       side: THREE.DoubleSide,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
-      morphTargets: true,
-      skinning: true,
     });
 
     mat.onBeforeCompile = (shader) => {

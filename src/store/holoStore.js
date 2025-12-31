@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { COLORS } from '../utils/constants';
 
 export const useHoloStore = create(
   persist(
@@ -7,7 +8,7 @@ export const useHoloStore = create(
       // États
       aiActive: false,
       rotation: true,
-      color: '#00ffff',
+      color: COLORS.CYAN,
       message: 'Système holographique initialisé',
       isThinking: false,
       chatHistory: [],
@@ -15,7 +16,7 @@ export const useHoloStore = create(
       // Actions pour l'IA
       setAiActive: (active) => set({
         aiActive: active,
-        color: active ? '#00ff88' : '#00ffff',
+        color: active ? COLORS.ACTIVE_BLUE : COLORS.CYAN,
         message: active ? 'IA activée - Prêt à interagir' : 'IA en veille'
       }),
 
@@ -60,7 +61,7 @@ export const useHoloStore = create(
       reset: () => set({
         aiActive: false,
         rotation: true,
-        color: '#00ffff',
+        color: COLORS.CYAN,
         message: 'Système réinitialisé',
         isThinking: false,
         chatHistory: []
