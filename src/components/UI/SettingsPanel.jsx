@@ -9,7 +9,8 @@ const SettingsPanel = () => {
         voiceName, setVoiceName,
         avatarType, setAvatarType,
         voiceEnabled, setVoiceEnabled,
-        geminiModel, setGeminiModel
+        geminiModel, setGeminiModel,
+        faceTrackingActive, setIsFaceTrackingActive
     } = useHoloStore();
 
     const { stopSpeech, getVoices } = useVoice();
@@ -133,6 +134,20 @@ const SettingsPanel = () => {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+
+                        {/* Face Tracking Controls */}
+                        <div className="space-y-2">
+                            <label className="text-cyan-200 text-xs font-rajdhani block">EYE_SYNC (WEBCAM)</label>
+                            <button
+                                onClick={() => setIsFaceTrackingActive(!faceTrackingActive)}
+                                className={`w-full py-1 rounded border text-xs font-orbitron transition-all ${faceTrackingActive
+                                    ? 'bg-purple-500/20 border-purple-500 text-purple-300 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                                    : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                    }`}
+                            >
+                                {faceTrackingActive ? 'LINKED: ON 👁️' : 'LINKED: OFF'}
+                            </button>
                         </div>
 
                     </motion.div>

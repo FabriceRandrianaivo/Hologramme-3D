@@ -9,23 +9,24 @@
     "lint": "eslint . --ext js,jsx"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.22-rc.20250304",
+    "@react-three/drei": "^9.92.0",
+    "@react-three/fiber": "^8.15.0",
+    "axios": "^1.6.0",
+    "framer-motion": "^10.16.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@react-three/fiber": "^8.15.0",
-    "@react-three/drei": "^9.92.0",
     "three": "^0.160.0",
-    "zustand": "^4.4.7",
-    "axios": "^1.6.0",
-    "framer-motion": "^10.16.0"
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.0",
-    "vite": "^5.0.0",
-    "tailwindcss": "^3.4.0",
     "autoprefixer": "^10.4.0",
+    "eslint": "^8.55.0",
     "postcss": "^8.4.0",
-    "eslint": "^8.55.0"
+    "tailwindcss": "^3.4.0",
+    "vite": "^5.0.0"
   }
 }

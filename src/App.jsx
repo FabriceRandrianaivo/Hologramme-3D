@@ -7,8 +7,12 @@ import StatusIndicator from './components/UI/StatusIndicator';
 import ControlPanel from './components/UI/ControlPanel';
 import ChatInterface from './components/UI/ChatInterface';
 import SettingsPanel from './components/UI/SettingsPanel';
+import { useFaceTracking } from './hooks/useFaceTracking';
 
 export default function HologramApp() {
+  // Initialisation du tracker facial
+  useFaceTracking();
+
   return (
     <MainLayout>
       {/* Canvas 3D */}

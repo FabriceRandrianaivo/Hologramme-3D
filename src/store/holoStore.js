@@ -33,6 +33,12 @@ export const useHoloStore = create(
       setVoiceEnabled: (enabled) => set({ voiceEnabled: enabled }),
       setGeminiModel: (model) => set({ geminiModel: model }),
 
+      // Face Tracking (Webcam)
+      faceTrackingActive: false,
+      faceRotation: { x: 0, y: 0, z: 0 },
+      setIsFaceTrackingActive: (active) => set({ faceTrackingActive: active }),
+      setFaceRotation: (rotation) => set({ faceRotation: rotation }),
+
       isSpeaking: false,
       setIsSpeaking: (speaking) => set({ isSpeaking: speaking }),
 
