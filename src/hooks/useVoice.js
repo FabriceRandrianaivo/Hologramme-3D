@@ -65,8 +65,12 @@ export const useVoice = () => {
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'fr-FR';
-            utterance.rate = 0.9;
+            utterance.rate = 1.0;
             utterance.pitch = 1;
+
+            utterance.onstart = () => useHoloStore.getState().setIsSpeaking(true);
+            utterance.onend = () => useHoloStore.getState().setIsSpeaking(false);
+            utterance.onerror = () => useHoloStore.getState().setIsSpeaking(false);
 
             window.speechSynthesis.speak(utterance);
             setMessage('🔊 Hologramme parle...');

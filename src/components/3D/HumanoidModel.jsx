@@ -8,13 +8,13 @@ const HumanoidModel = () => {
   const groupRef = useRef();
   const timeRef = useRef(0);
   const [hovered, setHovered] = useState(false);
-  const { color } = useHoloStore();
+  const { color, isSpeaking } = useHoloStore();
 
   // Charger le modèle 3D
   const { nodes } = useGLTF('/models/face2.glb');
 
   useEffect(() => {
-    // Debug: Voir les noms des nodes disponibles
+    // Debug
     console.log("🤖 Nodes disponibles:", nodes ? Object.keys(nodes) : 'aucun');
   }, [nodes]);
 
@@ -23,16 +23,26 @@ const HumanoidModel = () => {
     const animate = () => {
       timeRef.current += 0.016;
       if (groupRef.current) {
-        // Rotation douce pour donner vie
+        // Rotation douce
         groupRef.current.rotation.y = Math.sin(timeRef.current * 0.2) * 0.1;
-        // Léger flottement
+        // Flottement
         groupRef.current.position.y = Math.sin(timeRef.current * 0.5) * 0.1;
+
+        // LIP-SYNC SIMPLE 👄
+        if (isSpeaking) {
+          // Vibration rapide sur l'échelle Y
+          const speechWave = Math.sin(timeRef.current * 20) * 0.2;
+          groupRef.current.scale.y = (hovered ? 15.5 : 15) + speechWave;
+        } else {
+          // Retour à la normale
+          groupRef.current.scale.y = hovered ? 15.5 : 15;
+        }
       }
       animationId = requestAnimationFrame(animate);
     };
     animate();
     return () => cancelAnimationFrame(animationId);
-  }, []);
+  }, [hovered, isSpeaking]);
 
   // Trouver le premier mesh disponible automatiquement
   const meshNode = React.useMemo(() => {

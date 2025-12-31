@@ -1,7 +1,7 @@
 export class AIService {
   constructor(apiKey = null) {
     this.apiKey = apiKey;
-    this.baseURL = 'https://api.anthropic.com/v1/messages';
+    this.baseURL = '/api/anthropic';
     this.model = 'claude-sonnet-4-20250514';
   }
 

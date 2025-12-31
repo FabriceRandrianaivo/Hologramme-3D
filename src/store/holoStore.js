@@ -18,6 +18,9 @@ export const useHoloStore = create((set) => ({
 
   setIsThinking: (isThinking) => set({ isThinking }),
 
+  isSpeaking: false,
+  setIsSpeaking: (isSpeaking) => set({ isSpeaking }),
+
   // Actions pour l'hologramme
   setRotation: (rotation) => set({ rotation }),
 

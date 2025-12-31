@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ChatInterface = () => {
     const { chatHistory, isThinking, aiActive } = useHoloStore();
     const { sendMessage } = useAI();
-    const { isListening, startListening, stopListening } = useVoice();
+    const { isListening, startListening, stopListening, speak } = useVoice();
     const [input, setInput] = useState('');
     const messagesEndRef = useRef(null);
     const inputRef = useRef(null);
@@ -20,19 +20,26 @@ const ChatInterface = () => {
         scrollToBottom();
     }, [chatHistory, isThinking]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!input.trim() || !aiActive) return;
 
-        sendMessage(input);
+        const userText = input;
         setInput('');
+
+        const response = await sendMessage(userText);
+        if (response) {
+            speak(response);
+        }
     };
 
     // Callback pour la voix
-    const handleVoiceResult = (text) => {
+    const handleVoiceResult = async (text) => {
         setInput(text);
-        // Optionnel: Envoyer automatiquement
-        // sendMessage(text);
+        const response = await sendMessage(text);
+        if (response) {
+            speak(response);
+        }
     };
 
     if (!aiActive) return null;
@@ -102,8 +109,8 @@ const ChatInterface = () => {
                             type="button"
                             onClick={isListening ? stopListening : () => startListening(handleVoiceResult)}
                             className={`px-3 rounded-lg border transition-all flex items-center justify-center ${isListening
-                                    ? 'bg-red-500/20 border-red-500/50 text-red-400 animate-pulse'
-                                    : 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/40'
+                                ? 'bg-red-500/20 border-red-500/50 text-red-400 animate-pulse'
+                                : 'bg-cyan-500/20 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/40'
                                 }`}
                             title={isListening ? "Arrêter l'écoute" : "Activer le micro"}
                         >
