@@ -8,6 +8,7 @@ const SettingsPanel = () => {
     const {
         voiceName, setVoiceName,
         avatarType, setAvatarType,
+        avatarDisplayMode, setAvatarDisplayMode,
         voiceEnabled, setVoiceEnabled,
         geminiModel, setGeminiModel,
         faceTrackingActive, setIsFaceTrackingActive,
@@ -120,6 +121,42 @@ const SettingsPanel = () => {
                                 </button>
                             </div>
                         </div>
+
+                        {/* Display Mode Controls */}
+                        {avatarType === 'face' && (
+                            <div className="space-y-2">
+                                <label className="text-cyan-200 text-xs font-rajdhani block">DISPLAY_MODE</label>
+                                <div className="grid grid-cols-3 gap-1">
+                                    <button
+                                        onClick={() => setAvatarDisplayMode('head')}
+                                        className={`py-1 border text-[9px] font-orbitron rounded transition-all ${avatarDisplayMode === 'head'
+                                            ? 'bg-cyan-500/30 border-cyan-400 text-cyan-100 shadow-[0_0_10px_rgba(0,255,255,0.3)]'
+                                            : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                            }`}
+                                    >
+                                        HEAD
+                                    </button>
+                                    <button
+                                        onClick={() => setAvatarDisplayMode('bust')}
+                                        className={`py-1 border text-[9px] font-orbitron rounded transition-all ${avatarDisplayMode === 'bust'
+                                            ? 'bg-cyan-500/30 border-cyan-400 text-cyan-100 shadow-[0_0_10px_rgba(0,255,255,0.3)]'
+                                            : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                            }`}
+                                    >
+                                        BUST
+                                    </button>
+                                    <button
+                                        onClick={() => setAvatarDisplayMode('full')}
+                                        className={`py-1 border text-[9px] font-orbitron rounded transition-all ${avatarDisplayMode === 'full'
+                                            ? 'bg-cyan-500/30 border-cyan-400 text-cyan-100 shadow-[0_0_10px_rgba(0,255,255,0.3)]'
+                                            : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                            }`}
+                                    >
+                                        FULL
+                                    </button>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Model Controls */}
                         <div className="space-y-2">

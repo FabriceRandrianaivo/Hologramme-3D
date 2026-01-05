@@ -9,7 +9,7 @@ const HumanoidModel = () => {
   const groupRef = useRef();
   const timeRef = useRef(0);
   const [hovered, setHovered] = useState(false);
-  const { color, isSpeaking, faceRotation, faceTrackingActive } = useHoloStore();
+  const { color, isSpeaking, faceRotation, faceTrackingActive, avatarDisplayMode } = useHoloStore();
 
   // Charger le modèle 3D complet
   const { scene, nodes } = useGLTF('/models/rpm_avatar.glb');
@@ -17,20 +17,26 @@ const HumanoidModel = () => {
   // Cloner et forcer les propriétés
   const clonedScene = useMemo(() => {
     const clone = scene.clone();
-    console.log("🛠️ [HologramAI] Filtrage des parties du corps...");
+    console.log(`🛠️ [HologramAI] Mode d'affichage : ${avatarDisplayMode}`);
 
     clone.traverse(child => {
       if (child.isMesh) {
         child.frustumCulled = false;
 
-        // On ne garde que ce qui appartient à la tête / cou / cheveux / buste
+        // Filtrage dynamique des parties
         const name = child.name.toLowerCase();
-        const keywords = ['head', 'neck', 'eye', 'hair', 'teeth', 'tongue', 'face', 'body', 'shirt', 'top', 'tshirt'];
-        const isHeadPart = keywords.some(k => name.includes(k));
+        const headKeywords = ['head', 'neck', 'eye', 'hair', 'teeth', 'tongue', 'face'];
+        const bustKeywords = [...headKeywords, 'body', 'shirt', 'top', 'tshirt'];
 
-        if (!isHeadPart) {
-          child.visible = false;
+        let isPartVisible = true;
+        if (avatarDisplayMode === 'head') {
+          isPartVisible = headKeywords.some(k => name.includes(k));
+        } else if (avatarDisplayMode === 'bust') {
+          isPartVisible = bustKeywords.some(k => name.includes(k));
         }
+        // En mode 'full', on laisse tout visible
+
+        child.visible = isPartVisible;
 
         if (child.morphTargetDictionary && child.morphTargetInfluences) {
           child.morphTargetInfluences.fill(0);
@@ -38,13 +44,22 @@ const HumanoidModel = () => {
       }
     });
 
-    // Centrage et orientation
+    // Recentrage dynamique
     clone.rotation.y = Math.PI;
-    clone.position.y = -1.2; // Ajusté pour inclure le buste dans la vue
+
+    // Ajustement de la hauteur selon le mode
+    if (avatarDisplayMode === 'head' || avatarDisplayMode === 'bust') {
+      clone.position.y = -1.65; // Centre la tête ou aligne le buste à la plateforme
+    } else {
+      // Mode FULL : On veut les pieds sur la plateforme (y=-0.6)
+      // Les RPM models ont souvent leur origine au centre du corps ou entre les pieds.
+      // On va tester 0 pour commencer, puis ajuster si besoin.
+      clone.position.y = -0.6;
+    }
     clone.position.z = 0;
 
     return clone;
-  }, [scene]);
+  }, [scene, avatarDisplayMode]);
 
   // Référence spécifique pour le mesh pour manipuler les morphTargets
   const meshRef = useRef();

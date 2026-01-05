@@ -20,7 +20,7 @@ const HoloPlatform = () => {
   }, []);
 
   return (
-    <mesh ref={meshRef} position={[0, -1.8, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh ref={meshRef} position={[0, -0.6, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <ringGeometry args={[1.5, 2, 64]} />
       <meshBasicMaterial color="#00ffff" transparent opacity={0.2} side={THREE.DoubleSide} />
     </mesh>

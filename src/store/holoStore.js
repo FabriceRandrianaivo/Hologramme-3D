@@ -24,13 +24,13 @@ export const useHoloStore = create(
 
       // État Personnalisation
       voiceName: null,
-      avatarType: 'face',
-      voiceEnabled: true,
       geminiModel: 'gemini-2.5-flash',
+      avatarDisplayMode: 'bust', // 'head' ou 'bust'
 
       // Actions
       setVoiceName: (voiceName) => set({ voiceName }),
       setAvatarType: (avatarType) => set({ avatarType }),
+      setAvatarDisplayMode: (mode) => set({ avatarDisplayMode: mode }),
       setVoiceEnabled: (enabled) => set({ voiceEnabled: enabled }),
       setGeminiModel: (model) => set({ geminiModel: model }),
 
@@ -72,6 +72,7 @@ export const useHoloStore = create(
       partialize: (state) => ({
         voiceName: state.voiceName,
         avatarType: state.avatarType,
+        avatarDisplayMode: state.avatarDisplayMode,
         voiceEnabled: state.voiceEnabled,
         geminiModel: state.geminiModel,
         color: state.color

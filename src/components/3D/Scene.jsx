@@ -12,11 +12,11 @@ const Scene = () => {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 1.2]} fov={40} />
+      <PerspectiveCamera makeDefault position={[0, 0, 1.2]} fov={35} />
       <OrbitControls
         enablePan={false}
-        minDistance={1}
-        maxDistance={8}
+        minDistance={0.5}
+        maxDistance={12}
         autoRotate={rotation}
         autoRotateSpeed={ANIMATION.ROTATION_SPEED}
         target={[0, 0, 0]}
