@@ -9,6 +9,7 @@ const SettingsPanel = () => {
         voiceName, setVoiceName,
         avatarType, setAvatarType,
         avatarDisplayMode, setAvatarDisplayMode,
+        visualMode, setVisualMode,
         voiceEnabled, setVoiceEnabled,
         geminiModel, setGeminiModel,
         faceTrackingActive, setIsFaceTrackingActive,
@@ -157,6 +158,31 @@ const SettingsPanel = () => {
                                 </div>
                             </div>
                         )}
+
+                        {/* Visual Mode Controls */}
+                        <div className="space-y-2">
+                            <label className="text-cyan-200 text-xs font-rajdhani block">VISUAL_STYLE</label>
+                            <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    onClick={() => setVisualMode('hologram')}
+                                    className={`py-1 border text-[10px] font-orbitron rounded transition-all ${visualMode === 'hologram'
+                                        ? 'bg-cyan-500/30 border-cyan-400 text-cyan-100 shadow-[0_0_10px_rgba(0,255,255,0.3)]'
+                                        : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                        }`}
+                                >
+                                    HOLOGRAM
+                                </button>
+                                <button
+                                    onClick={() => setVisualMode('realistic')}
+                                    className={`py-1 border text-[10px] font-orbitron rounded transition-all ${visualMode === 'realistic'
+                                        ? 'bg-purple-500/30 border-purple-400 text-purple-100 shadow-[0_0_10px_rgba(168,85,247,0.3)]'
+                                        : 'bg-black/40 border-cyan-900/50 text-cyan-700 hover:border-cyan-600'
+                                        }`}
+                                >
+                                    REALISTIC
+                                </button>
+                            </div>
+                        </div>
 
                         {/* Model Controls */}
                         <div className="space-y-2">

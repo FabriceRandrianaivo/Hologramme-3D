@@ -12,6 +12,8 @@ export const useHoloStore = create(
       message: 'Système holographique initialisé',
       isThinking: false,
       chatHistory: [],
+      avatarType: 'face',
+      voiceEnabled: true,
 
       // Actions pour l'IA
       setAiActive: (active) => set({
@@ -25,12 +27,14 @@ export const useHoloStore = create(
       // État Personnalisation
       voiceName: null,
       geminiModel: 'gemini-2.5-flash',
-      avatarDisplayMode: 'bust', // 'head' ou 'bust'
+      avatarDisplayMode: 'bust', // 'head', 'bust' ou 'full'
+      visualMode: 'hologram', // 'hologram' ou 'realistic'
 
       // Actions
       setVoiceName: (voiceName) => set({ voiceName }),
       setAvatarType: (avatarType) => set({ avatarType }),
       setAvatarDisplayMode: (mode) => set({ avatarDisplayMode: mode }),
+      setVisualMode: (mode) => set({ visualMode: mode }),
       setVoiceEnabled: (enabled) => set({ voiceEnabled: enabled }),
       setGeminiModel: (model) => set({ geminiModel: model }),
 
@@ -73,6 +77,7 @@ export const useHoloStore = create(
         voiceName: state.voiceName,
         avatarType: state.avatarType,
         avatarDisplayMode: state.avatarDisplayMode,
+        visualMode: state.visualMode,
         voiceEnabled: state.voiceEnabled,
         geminiModel: state.geminiModel,
         color: state.color

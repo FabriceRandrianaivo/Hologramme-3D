@@ -67,8 +67,10 @@ export const useVoice = () => {
 
         if (!voiceEnabled) {
             console.warn('[useVoice] Voice disabled in settings.');
+            setMessage('🔇 Voix désactivée'); // Feedback visuel
             return;
         }
+        console.log('[useVoice] Proceeding with speech synthesis...');
         if (!('speechSynthesis' in window)) return;
 
         // Stop précédent
@@ -99,12 +101,23 @@ export const useVoice = () => {
             if (googleVoice) utterance.voice = googleVoice;
         }
 
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        utterance.onerror = () => setIsSpeaking(false);
+        utterance.onstart = () => {
+            console.log('[useVoice] Speech started');
+            setIsSpeaking(true);
+            setMessage('👄 Hologramme parle...');
+        };
+        utterance.onend = () => {
+            console.log('[useVoice] Speech ended');
+            setIsSpeaking(false);
+            setMessage('✅ Parole terminée');
+        };
+        utterance.onerror = (e) => {
+            console.error('[useVoice] Speech error:', e);
+            setIsSpeaking(false);
+            setMessage('❌ Erreur vocale');
+        };
 
         window.speechSynthesis.speak(utterance);
-        setMessage('🔊 Hologramme parle...');
     };
 
     const stopSpeech = () => {

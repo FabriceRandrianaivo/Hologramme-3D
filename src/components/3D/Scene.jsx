@@ -8,7 +8,9 @@ import HoloPlatform from "./HoloPlatform";
 import HoloSphere from "./HoloSphere";
 
 const Scene = () => {
-  const { rotation, avatarType } = useHoloStore();
+  const { rotation, avatarType, visualMode } = useHoloStore();
+
+  const isRealistic = visualMode === 'realistic';
 
   return (
     <>
@@ -22,11 +24,11 @@ const Scene = () => {
         target={[0, 0, 0]}
       />
 
-      <ambientLight intensity={0.5} />
-      <pointLight position={[2, 2, 2]} intensity={2} color="#00ffff" />
-      <pointLight position={[-2, 2, 2]} intensity={1.5} color="#00ffff" />
-      <spotLight position={[0, 2, 1]} angle={0.4} penumbra={1} intensity={5} color="#00ffff" />
-      <pointLight position={[0, 0, -2]} intensity={3} color="#00ffff" /> {/* Rim Light */}
+      <ambientLight intensity={isRealistic ? 0.7 : 0.5} />
+      <pointLight position={[2, 2, 2]} intensity={isRealistic ? 1.5 : 2} color={isRealistic ? "#ffffff" : "#00ffff"} />
+      <pointLight position={[-2, 2, 2]} intensity={isRealistic ? 0.8 : 1.5} color={isRealistic ? "#ffffff" : "#00ffff"} />
+      <spotLight position={[0, 2, 1]} angle={0.4} penumbra={1} intensity={isRealistic ? 2 : 5} color={isRealistic ? "#ffffff" : "#00ffff"} />
+      <pointLight position={[0, 0, -2]} intensity={isRealistic ? 0.5 : 3} color={isRealistic ? "#ffffff" : "#00ffff"} /> {/* Rim Light */}
 
       <Suspense fallback={null}>
         {avatarType === 'face' ? <HumanoidModel /> : <HoloSphere />}
