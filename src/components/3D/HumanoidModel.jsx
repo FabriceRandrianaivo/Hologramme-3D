@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useHoloStore } from "../../store/holoStore";
+import { COLORS } from '../../utils/constants';
 
 const HumanoidModel = () => {
   const groupRef = useRef();
@@ -16,14 +17,32 @@ const HumanoidModel = () => {
   // Cloner et forcer les propriétés
   const clonedScene = useMemo(() => {
     const clone = scene.clone();
+    console.log("🛠️ [HologramAI] Filtrage des parties du corps...");
+
     clone.traverse(child => {
       if (child.isMesh) {
-        child.frustumCulled = false; // Évite que le visage disparaisse
+        child.frustumCulled = false;
+
+        // On ne garde que ce qui appartient à la tête / cou / cheveux / buste
+        const name = child.name.toLowerCase();
+        const keywords = ['head', 'neck', 'eye', 'hair', 'teeth', 'tongue', 'face', 'body', 'shirt', 'top', 'tshirt'];
+        const isHeadPart = keywords.some(k => name.includes(k));
+
+        if (!isHeadPart) {
+          child.visible = false;
+        }
+
         if (child.morphTargetDictionary && child.morphTargetInfluences) {
           child.morphTargetInfluences.fill(0);
         }
       }
     });
+
+    // Centrage et orientation
+    clone.rotation.y = Math.PI;
+    clone.position.y = -1.2; // Ajusté pour inclure le buste dans la vue
+    clone.position.z = 0;
+
     return clone;
   }, [scene]);
 
@@ -32,15 +51,18 @@ const HumanoidModel = () => {
 
   // Material Holographique ultra-résilient
   const material = useMemo(() => {
+    const isSkinTone = [COLORS.SKIN_LIGHT, COLORS.SKIN_MEDIUM, COLORS.SKIN_DARK].includes(color);
+
     const mat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(color),
       transparent: true,
-      opacity: 0.75,
+      opacity: isSkinTone ? 0.9 : 0.4,
       emissive: new THREE.Color(color),
-      emissiveIntensity: 0.45,
+      emissiveIntensity: isSkinTone ? 0.2 : 0.8,
       side: THREE.DoubleSide,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      blending: isSkinTone ? THREE.NormalBlending : THREE.AdditiveBlending,
+      wireframe: !isSkinTone,
     });
 
     mat.onBeforeCompile = (shader) => {
@@ -108,14 +130,14 @@ const HumanoidModel = () => {
 
     if (groupRef.current) {
       // 1. Dérive Organique (Idle) & Suivi
-      const driftX = Math.sin(time * 0.15) * 0.02 + Math.cos(time * 0.08) * 0.01;
-      const driftY = Math.sin(time * 0.12) * 0.04 + Math.cos(time * 0.07) * 0.02;
+      const driftX = Math.sin(time * 0.1) * 0.01;
+      const driftY = Math.sin(time * 0.08) * 0.02;
 
       const lookX = faceTrackingActive ? faceRotation.x : driftX;
       const lookY = faceTrackingActive ? faceRotation.y : driftY;
 
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, lookX, 0.08);
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, lookY, 0.08);
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, lookX, 0.05);
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, lookY, 0.05);
 
       // 2. LIP-SYNC CHIRURGICAL 👄
       // Pulse test force l'ouverture au début, LifePulse donne un peu de vie

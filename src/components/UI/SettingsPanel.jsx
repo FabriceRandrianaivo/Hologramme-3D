@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHoloStore } from '../../store/holoStore';
 import { useVoice } from '../../hooks/useVoice';
-import { GEMINI_CONFIG } from '../../utils/constants';
+import { COLORS, GEMINI_CONFIG } from '../../utils/constants';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SettingsPanel = () => {
@@ -10,7 +10,8 @@ const SettingsPanel = () => {
         avatarType, setAvatarType,
         voiceEnabled, setVoiceEnabled,
         geminiModel, setGeminiModel,
-        faceTrackingActive, setIsFaceTrackingActive
+        faceTrackingActive, setIsFaceTrackingActive,
+        color, setColor
     } = useHoloStore();
 
     const { stopSpeech, getVoices } = useVoice();
@@ -148,6 +149,22 @@ const SettingsPanel = () => {
                             >
                                 {faceTrackingActive ? 'LINKED: ON 👁️' : 'LINKED: OFF'}
                             </button>
+                        </div>
+
+                        {/* Color Controls */}
+                        <div className="space-y-2">
+                            <label className="text-cyan-200 text-xs font-rajdhani block">HOLO_COLOR</label>
+                            <div className="grid grid-cols-5 gap-1">
+                                {Object.entries(COLORS).map(([name, value]) => (
+                                    <button
+                                        key={name}
+                                        onClick={() => setColor(value)}
+                                        className={`w-full h-6 rounded-sm border transition-all ${color === value ? 'border-white scale-110 shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                        style={{ backgroundColor: value }}
+                                        title={name}
+                                    />
+                                ))}
+                            </div>
                         </div>
 
                     </motion.div>

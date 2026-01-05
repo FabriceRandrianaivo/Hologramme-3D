@@ -16,7 +16,11 @@ export default function HologramApp() {
   return (
     <MainLayout>
       {/* Canvas 3D */}
-      <Canvas shadows className="absolute inset-0">
+      <Canvas
+        shadows
+        className="absolute inset-5"
+        gl={{ preserveDrawingBuffer: true }}
+      >
         <Suspense fallback={null}>
           <Scene />
         </Suspense>

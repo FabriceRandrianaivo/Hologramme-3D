@@ -6,7 +6,10 @@ export const COLORS = {
   PURPLE: '#8800ff',
   PINK: '#ff00ff',
   ORANGE: '#ff8800',
-  RED: '#ff0088'
+  RED: '#ff0088',
+  SKIN_LIGHT: '#ffdbac',
+  SKIN_MEDIUM: '#e0ac69',
+  SKIN_DARK: '#8d5524'
 };
 
 // États de l'IA

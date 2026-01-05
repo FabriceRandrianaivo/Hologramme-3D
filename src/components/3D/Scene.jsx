@@ -12,25 +12,27 @@ const Scene = () => {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 2, 6]} fov={50} />
+      <PerspectiveCamera makeDefault position={[0, 0, 1.2]} fov={40} />
       <OrbitControls
         enablePan={false}
-        minDistance={3}
-        maxDistance={10}
+        minDistance={1}
+        maxDistance={8}
         autoRotate={rotation}
         autoRotateSpeed={ANIMATION.ROTATION_SPEED}
+        target={[0, 0, 0]}
       />
 
-      <ambientLight intensity={0.2} />
-      <pointLight position={[10, 10, 10]} intensity={0.5} color="#00ffff" />
-      <pointLight position={[-10, -10, -10]} intensity={0.3} color="#ff00ff" />
-      <spotLight position={[0, 5, 0]} angle={0.3} penumbra={1} intensity={2} color="#00ffff" />
+      <ambientLight intensity={0.5} />
+      <pointLight position={[2, 2, 2]} intensity={2} color="#00ffff" />
+      <pointLight position={[-2, 2, 2]} intensity={1.5} color="#00ffff" />
+      <spotLight position={[0, 2, 1]} angle={0.4} penumbra={1} intensity={5} color="#00ffff" />
+      <pointLight position={[0, 0, -2]} intensity={3} color="#00ffff" /> {/* Rim Light */}
 
       <Suspense fallback={null}>
         {avatarType === 'face' ? <HumanoidModel /> : <HoloSphere />}
       </Suspense>
 
-      {/* <HoloPlatform /> */}
+      <HoloPlatform />
     </>
   );
 };
